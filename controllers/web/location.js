@@ -65,7 +65,7 @@ async function updateData(req, res) {
         let loginUserId = reqObj.login_user_id;
 
 
-        if (!reqObj._id) {
+        if (!req.params.id) {
             throw {
                 errors: [],
                 message: responseMessage(reqObj.langCode, 'ID_MISSING'),
@@ -77,7 +77,7 @@ async function updateData(req, res) {
         let requestedData = { ...reqObj, ...{ updated_by: loginUserId } };
         
         let updatedData = await LocationSchema.findOneAndUpdate({
-            _id: reqObj._id
+            _id: req.params.id
         }, requestedData, {
             new: true
         });
@@ -105,18 +105,18 @@ async function updateData(req, res) {
 async function deleteData(req, res) {
     try {
         let reqObj = req.body;
-        let { _id } = req.query;
-
-        if (!_id) {
+        let  id  = req.params.id;
+        if (!id) {
+            
             throw {
                 errors: [],
                 message: responseMessage(reqObj.langCode, 'ID_MISSING'),
                 statusCode: 412
             }
         }
-
-        let getData = await LocationSchema.findOne({ "_id":new ObjectID(_id)});
-
+        
+        
+        let getData = await LocationSchema.findOne({ "_id":new ObjectID(id)});
         if (!getData) {
             throw {
                 errors: [],
@@ -125,7 +125,7 @@ async function deleteData(req, res) {
             }
         }
 
-        const dataRemoved = await LocationSchema.deleteOne({ "_id":new ObjectID(_id)});
+        const dataRemoved = await LocationSchema.deleteOne({ "_id":new ObjectID(id)});
         
         res.status(200).json(await Response.success({}, responseMessage(reqObj.langCode,'RECORD_DELETED'),req));
 

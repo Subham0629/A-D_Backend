@@ -41,9 +41,9 @@ router.post('/users/login', controllerObj.user.loginUser);
 // Location Routes
 router.get('/location', middleware.jwtVerify, controllerObj.location.getList);
 router.get('/location/detail', middleware.jwtVerify, controllerObj.location.getDetails);
-router.put('/location', middleware.jwtVerify, controllerObj.location.updateData);
+router.put('/location/:id', middleware.jwtVerify, controllerObj.location.updateData);
 router.post('/location', middleware.jwtVerify, controllerObj.location.createData);
-router.delete('/location', middleware.jwtVerify, controllerObj.location.deleteData);
+router.delete('/location/:id', middleware.jwtVerify, controllerObj.location.deleteData);
 
 // Warehouse Routes
 router.get('/warehouse', middleware.jwtVerify, controllerObj.warehouse.getList);
