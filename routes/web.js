@@ -48,23 +48,23 @@ router.delete('/location/:id', middleware.jwtVerify, controllerObj.location.dele
 // Warehouse Routes
 router.get('/warehouse', middleware.jwtVerify, controllerObj.warehouse.getList);
 router.get('/warehouse/detail', middleware.jwtVerify, controllerObj.warehouse.getDetails);
-router.put('/warehouse', middleware.jwtVerify, controllerObj.warehouse.updateData);
+router.put('/warehouse/:id', middleware.jwtVerify, controllerObj.warehouse.updateData);
 router.post('/warehouse', middleware.jwtVerify, controllerObj.warehouse.createData);
-router.delete('/warehouse', middleware.jwtVerify, controllerObj.warehouse.deleteData);
+router.delete('/warehouse/:id', middleware.jwtVerify, controllerObj.warehouse.deleteData);
 
 // Vendor Routes
 router.get('/vendor', middleware.jwtVerify, controllerObj.vendor.getList);
 router.get('/vendor/detail', middleware.jwtVerify, controllerObj.vendor.getDetails);
-router.put('/vendor', middleware.jwtVerify, controllerObj.vendor.updateData);
+router.put('/vendor/:id', middleware.jwtVerify, controllerObj.vendor.updateData);
 router.post('/vendor', middleware.jwtVerify, controllerObj.vendor.createData);
-router.delete('/vendor', middleware.jwtVerify, controllerObj.vendor.deleteData);
+router.delete('/vendor/:id', middleware.jwtVerify, controllerObj.vendor.deleteData);
 
 // Seller Routes
 router.get('/seller', middleware.jwtVerify, controllerObj.seller.getList);
 router.get('/seller/detail', middleware.jwtVerify, controllerObj.seller.getDetails);
-router.put('/seller', middleware.jwtVerify, controllerObj.seller.updateData);
+router.put('/seller/:id', middleware.jwtVerify, controllerObj.seller.updateData);
 router.post('/seller', middleware.jwtVerify, controllerObj.seller.createData);
-router.delete('/seller', middleware.jwtVerify, controllerObj.seller.deleteData);
+router.delete('/seller/:id', middleware.jwtVerify, controllerObj.seller.deleteData);
 
 
 module.exports = router;

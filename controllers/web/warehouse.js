@@ -65,7 +65,7 @@ async function updateData(req, res) {
         let loginUserId = reqObj.login_user_id;
 
 
-        if (!reqObj._id) {
+        if (!req.params.id) {
             throw {
                 errors: [],
                 message: responseMessage(reqObj.langCode, 'ID_MISSING'),
@@ -76,7 +76,7 @@ async function updateData(req, res) {
         let requestedData = { ...reqObj, ...{ updated_by: loginUserId } };
 
         let updatedData = await WarehouseSchema.findOneAndUpdate({
-            _id:new ObjectID(reqObj._id)
+            _id:new ObjectID(req.params.id)
         }, requestedData, {
             new: true
         });
@@ -103,8 +103,8 @@ async function updateData(req, res) {
 async function deleteData(req, res) {
     try {
         let reqObj = req.body;
-        let { _id } = req.query;
-        if (!_id) {
+        let id  = req.params.id;
+        if (!id) {
             throw {
                 errors: [],
                 message: responseMessage(reqObj.langCode, 'ID_MISSING'),
@@ -112,7 +112,7 @@ async function deleteData(req, res) {
             }
         }
          
-        let getData = await WarehouseSchema.findOne({ "_id":new ObjectID(_id)});
+        let getData = await WarehouseSchema.findOne({ "_id":new ObjectID(id)});
         if (!getData) {
             throw {
                 errors: [],
@@ -121,12 +121,12 @@ async function deleteData(req, res) {
             }
         }
 
-        const dataRemoved = await WarehouseSchema.deleteOne({ "_id":new ObjectID(_id)});
+        const dataRemoved = await WarehouseSchema.deleteOne({ "_id":new ObjectID(id)});
 
         // Remove references from LocationSchema where warehouse matches
         await LocationSchema.updateMany(
-            { "warehouse":new mongoose.Types.ObjectId(_id) },
-            { $pull: { "warehouse":new mongoose.Types.ObjectId(_id) } }
+            { "warehouse":new mongoose.Types.ObjectId(id) },
+            { $pull: { "warehouse":new mongoose.Types.ObjectId(id) } }
         );
         
         res.status(200).json(await Response.success({}, responseMessage(reqObj.langCode,'RECORD_DELETED'),req));

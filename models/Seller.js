@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const config = require('../config/env');
+const schema = mongoose.Schema;
 
 const SellerSchema = new mongoose.Schema({
 
@@ -12,6 +13,10 @@ const SellerSchema = new mongoose.Schema({
         type:String,
         required:true,
         default: ''
+    },
+    warehouse:{
+        type:schema.Types.ObjectId,
+        required:true
     },
     phone:{
         type:Number,

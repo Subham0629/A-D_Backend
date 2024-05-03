@@ -19,15 +19,15 @@ async function createData(req, res) {
         let reqObj = req.body;
         reqObj.created_by = reqObj.login_user_id;
         reqObj.updated_by = reqObj.login_user_id;
-           // Convert seller_name to lowercase for case-insensitive comparison
-           const lowerCaseSellerName = reqObj.seller_name.toLowerCase();
 
-           // Check for duplicate seller_name (case-insensitive)
-           const existingSeller = await SellerSchema.findOne({ seller_name: { $regex: new RegExp('^' + lowerCaseSellerName + '$', 'i') } });
+           const matchAadhar= reqObj.aadhar_number
+
+           // Check for duplicate lowerCaseAadhar (case-insensitive)
+           const existingSeller = await SellerSchema.findOne({ aadhar_number: matchAadhar });
            if (existingSeller) {
                throw {
                    errors: [],
-                   message: "Seller with the same name already exists.",
+                   message: "Seller with the same aadhar already exists.",
                    statusCode: 400
                }
            }
@@ -62,7 +62,7 @@ async function updateData(req, res) {
         let loginUserId = reqObj.login_user_id;
 
 
-        if (!reqObj._id) {
+        if (!req.params.id) {
             throw {
                 errors: [],
                 message: responseMessage(reqObj.langCode, 'ID_MISSING'),
@@ -73,7 +73,7 @@ async function updateData(req, res) {
         let requestedData = { ...reqObj, ...{ updated_by: loginUserId } };
 
         let updatedData = await SellerSchema.findOneAndUpdate({
-            _id:new ObjectID(reqObj._id)
+            _id:new ObjectID(req.params.id)
         }, requestedData, {
             new: true
         });
@@ -100,8 +100,8 @@ async function updateData(req, res) {
 async function deleteData(req, res) {
     try {
         let reqObj = req.body;
-        let { _id } = req.query;
-        if (!_id) {
+        let id  = req.params.id;
+        if (!id) {
             throw {
                 errors: [],
                 message: responseMessage(reqObj.langCode, 'ID_MISSING'),
@@ -109,7 +109,7 @@ async function deleteData(req, res) {
             }
         }
          
-        let getData = await SellerSchema.findOne({ "_id":new ObjectID(_id)});
+        let getData = await SellerSchema.findOne({ "_id":new ObjectID(id)});
         if (!getData) {
             throw {
                 errors: [],
@@ -118,7 +118,7 @@ async function deleteData(req, res) {
             }
         }
 
-        const dataRemoved = await SellerSchema.deleteOne({ "_id":new ObjectID(_id)});
+        const dataRemoved = await SellerSchema.deleteOne({ "_id":new ObjectID(id)});
 
         res.status(200).json(await Response.success({}, responseMessage(reqObj.langCode,'RECORD_DELETED'),req));
 
