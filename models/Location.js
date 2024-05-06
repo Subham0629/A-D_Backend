@@ -6,8 +6,7 @@ const LocationSchema = new mongoose.Schema(
     location_name: {
       type: String,
       required: true,
-    },
-    warehouse: { type: Array, default: [] },
+    }
   },
   {
     timestamps: {
